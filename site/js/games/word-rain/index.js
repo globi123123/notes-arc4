@@ -8,7 +8,8 @@ import { createGameCanvas, fillRoundRect, roundRect } from '../../lib/canvas.js'
 import { createLoop } from '../../lib/loop.js';
 import { h } from '../../lib/dom.js';
 import { formatPercent } from '../../lib/format.js';
-import { font, palette } from '../../lib/palette.js';
+import { font, palette, surfaces } from '../../lib/palette.js';
+import { onThemeChange } from '../../lib/theme.js';
 import { prefersReducedMotion } from '../../lib/motion.js';
 import { randomRange } from '../../lib/random.js';
 import { WORDS_BY_LENGTH } from './words.js';
@@ -305,9 +306,10 @@ export default function mount(ctx) {
   // ----- Rendering -----
 
   function render() {
+    const s = surfaces();
     const sky = g.createLinearGradient(0, 0, 0, H);
-    sky.addColorStop(0, '#eef1f3');
-    sky.addColorStop(1, '#f7f4ee');
+    sky.addColorStop(0, s.skyTop);
+    sky.addColorStop(1, s.skyBottom);
     g.fillStyle = sky;
     g.fillRect(0, 0, W, H);
 
@@ -325,7 +327,7 @@ export default function mount(ctx) {
     }
 
     // Ground
-    g.fillStyle = '#e3e7e3';
+    g.fillStyle = s.ground;
     g.fillRect(0, GROUND, W, H - GROUND);
     g.fillStyle = palette.sage;
     g.fillRect(0, GROUND, W, 3);
@@ -336,18 +338,18 @@ export default function mount(ctx) {
     for (const word of words) {
       const danger = word.y > GROUND - 90;
       const isTarget = word === target;
-      g.fillStyle = 'rgba(34,33,31,0.06)';
+      g.fillStyle = s.shadow;
       roundRect(g, word.x + 1, word.y + 2, word.width, 30, 15);
       g.fill();
-      fillRoundRect(g, word.x, word.y, word.width, 30, 15, palette.surface);
-      g.strokeStyle = isTarget ? palette.accent : danger ? palette.rose : palette.border;
+      fillRoundRect(g, word.x, word.y, word.width, 30, 15, s.raised);
+      g.strokeStyle = isTarget ? palette.accent : danger ? palette.rose : s.line;
       g.lineWidth = isTarget ? 2 : 1;
       roundRect(g, word.x + 0.5, word.y + 0.5, word.width - 1, 29, 14.5);
       g.stroke();
 
       g.font = font(17, 600);
       g.textAlign = 'left';
-      g.fillStyle = palette.ink;
+      g.fillStyle = s.ink;
       g.fillText(word.text, word.x + 14, word.y + 21);
       if (isTarget) {
         g.fillStyle = palette.accent;
@@ -362,7 +364,7 @@ export default function mount(ctx) {
       g.textAlign = 'center';
       if (e.kind === 'level') {
         g.font = font(28, 700);
-        g.fillStyle = palette.ink;
+        g.fillStyle = s.ink;
         g.fillText(e.text, e.x, e.y);
       } else if (e.kind === 'hit') {
         g.font = font(15, 650);
@@ -378,18 +380,19 @@ export default function mount(ctx) {
 
     // Lives and level
     for (let i = 0; i < LIVES; i += 1) {
-      g.fillStyle = i < lives ? palette.accent : palette.borderStrong;
+      g.fillStyle = i < lives ? palette.accent : s.lineStrong;
       g.beginPath();
       g.arc(20 + i * 16, 20, 5, 0, Math.PI * 2);
       g.fill();
     }
     g.textAlign = 'right';
     g.font = font(12, 650);
-    g.fillStyle = palette.muted;
+    g.fillStyle = s.muted;
     g.fillText(`LEVEL ${level}`, W - 16, 24);
   }
 
   view.onResize(() => render());
+  ctx.onDestroy(onThemeChange(() => render()));
 
   reset();
   render();

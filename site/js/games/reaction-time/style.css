@@ -42,16 +42,16 @@
 }
 
 .rt-panel[data-state='waiting'] {
-  background: #e3e7dc;
+  background: var(--game-wait);
 }
 
 .rt-panel[data-state='waiting'] .rt-title {
-  color: #5f6d54;
+  color: var(--game-wait-ink);
 }
 
 .rt-panel[data-state='go'] {
   background: var(--color-accent);
-  color: #fff;
+  color: var(--color-on-accent);
 }
 
 .rt-panel[data-state='go'] .rt-title {
@@ -81,7 +81,7 @@
   min-width: 52px;
   height: 30px;
   padding: 0 var(--space-2);
-  border: 1px dashed rgba(34, 33, 31, 0.2);
+  border: 1px dashed color-mix(in srgb, currentColor 30%, transparent);
   border-radius: var(--radius-pill);
   color: var(--color-text-secondary);
   font-size: var(--text-xs);
@@ -91,8 +91,8 @@
 
 .rt-history li.is-done {
   border-style: solid;
-  border-color: rgba(34, 33, 31, 0.12);
-  background: rgba(255, 255, 255, 0.65);
+  border-color: color-mix(in srgb, var(--color-text) 14%, transparent);
+  background: color-mix(in srgb, var(--color-surface-raised) 70%, transparent);
   color: var(--color-text);
 }
 

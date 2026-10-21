@@ -55,14 +55,14 @@
 }
 
 .btn-primary {
-  --btn-bg: var(--color-accent);
-  --btn-fg: #fff;
-  --btn-border: var(--color-accent);
+  --btn-bg: var(--color-accent-strong);
+  --btn-fg: var(--color-on-accent);
+  --btn-border: var(--color-accent-strong);
 }
 
 .btn-primary:hover {
-  --btn-bg: var(--color-accent-hover);
-  --btn-border: var(--color-accent-hover);
+  --btn-bg: var(--color-accent-strong-hover);
+  --btn-border: var(--color-accent-strong-hover);
 }
 
 .btn-dark {
@@ -72,8 +72,8 @@
 }
 
 .btn-dark:hover {
-  --btn-bg: #3a3835;
-  --btn-border: #3a3835;
+  --btn-bg: var(--color-text-hover);
+  --btn-border: var(--color-text-hover);
 }
 
 .btn-ghost {
@@ -108,7 +108,7 @@
 
 .btn[aria-pressed='true'] {
   --btn-bg: var(--color-accent-soft);
-  --btn-border: rgba(198, 97, 63, 0.35);
+  --btn-border: var(--color-accent-border);
   --btn-fg: var(--color-accent-ink);
 }
 
@@ -158,8 +158,8 @@
 }
 
 .search__input:focus-visible {
-  border-color: rgba(198, 97, 63, 0.55);
-  box-shadow: 0 0 0 3px rgba(198, 97, 63, 0.15);
+  border-color: var(--color-accent-border);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-accent) 18%, transparent);
   border-radius: var(--radius-pill);
 }
 
@@ -349,7 +349,7 @@
 }
 
 .stat.is-highlight {
-  border-color: rgba(198, 97, 63, 0.4);
+  border-color: var(--color-accent-border);
   background: var(--color-accent-softer);
 }
 
@@ -416,7 +416,7 @@
 }
 
 .overlay.is-light {
-  background: rgba(245, 244, 239, 0.55);
+  background: var(--color-overlay-light);
   -webkit-backdrop-filter: none;
   backdrop-filter: none;
 }
@@ -583,9 +583,9 @@
 }
 
 .touch-btn.is-accent {
-  border-color: var(--color-accent);
-  background: var(--color-accent);
-  color: #fff;
+  border-color: var(--color-accent-strong);
+  background: var(--color-accent-strong);
+  color: var(--color-on-accent);
 }
 
 .touch-btn.is-active {
@@ -595,7 +595,7 @@
 }
 
 .touch-btn.is-accent.is-active {
-  background: var(--color-accent-hover);
+  background: var(--color-accent-strong-hover);
 }
 
 /* ---------- Empty state ---------- */

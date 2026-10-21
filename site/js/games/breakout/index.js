@@ -3,7 +3,8 @@
 import { createGameCanvas, fillRoundRect } from '../../lib/canvas.js';
 import { createLoop } from '../../lib/loop.js';
 import { createKeyboard, createTouchControls } from '../../lib/input.js';
-import { font, palette } from '../../lib/palette.js';
+import { font, palette, surfaces } from '../../lib/palette.js';
+import { onThemeChange } from '../../lib/theme.js';
 import { prefersReducedMotion } from '../../lib/motion.js';
 import { clamp, randomRange } from '../../lib/random.js';
 
@@ -380,16 +381,17 @@ export default function mount(ctx) {
   // ----- Rendering -----
 
   function render() {
-    g.fillStyle = palette.cream;
+    const s = surfaces();
+    g.fillStyle = s.board;
     g.fillRect(0, 0, W, H);
 
     // Soft floor line under the paddle
-    g.fillStyle = 'rgba(34,33,31,0.04)';
+    g.fillStyle = s.floor;
     g.fillRect(0, PADDLE_Y + 24, W, H);
 
     for (const brick of bricks) {
       if (brick.hp >= 2) {
-        fillRoundRect(g, brick.x, brick.y, brick.w, brick.h, 4, palette.inkSoft);
+        fillRoundRect(g, brick.x, brick.y, brick.w, brick.h, 4, s.inkSoft);
         fillRoundRect(g, brick.x + 3, brick.y + brick.h - 5, brick.w - 6, 2.5, 1.25, brick.color);
       } else {
         fillRoundRect(g, brick.x, brick.y, brick.w, brick.h, 4, brick.color);
@@ -405,7 +407,7 @@ export default function mount(ctx) {
     }
     g.globalAlpha = 1;
 
-    fillRoundRect(g, paddle.x - paddle.w / 2, PADDLE_Y, paddle.w, paddle.h, 6, palette.ink);
+    fillRoundRect(g, paddle.x - paddle.w / 2, PADDLE_Y, paddle.w, paddle.h, 6, s.ink);
 
     g.fillStyle = palette.accent;
     g.beginPath();
@@ -413,7 +415,7 @@ export default function mount(ctx) {
     g.fill();
 
     if (!launched && ctx.status === 'running') {
-      g.fillStyle = palette.muted;
+      g.fillStyle = s.muted;
       g.font = font(13, 550);
       g.textAlign = 'center';
       g.fillText('Press Space or click to launch', W / 2, PADDLE_Y - 34);
@@ -426,13 +428,14 @@ export default function mount(ctx) {
       g.arc(W - MARGIN - i * 16, 34, 5, 0, Math.PI * 2);
       g.fill();
     }
-    g.fillStyle = palette.muted;
+    g.fillStyle = s.muted;
     g.font = font(12, 600);
     g.textAlign = 'left';
     g.fillText(`LEVEL ${level + 1}`, MARGIN, 38);
   }
 
   view.onResize(() => render());
+  ctx.onDestroy(onThemeChange(() => render()));
 
   reset();
   render();

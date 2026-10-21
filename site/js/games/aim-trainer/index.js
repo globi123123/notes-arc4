@@ -2,7 +2,8 @@
 
 import { createGameCanvas } from '../../lib/canvas.js';
 import { createLoop } from '../../lib/loop.js';
-import { font, palette } from '../../lib/palette.js';
+import { font, palette, surfaces } from '../../lib/palette.js';
+import { onThemeChange } from '../../lib/theme.js';
 import { formatPercent } from '../../lib/format.js';
 import { prefersReducedMotion } from '../../lib/motion.js';
 import { randomRange } from '../../lib/random.js';
@@ -186,11 +187,12 @@ export default function mount(ctx) {
   }
 
   function render() {
-    g.fillStyle = palette.cream;
+    const s = surfaces();
+    g.fillStyle = s.board;
     g.fillRect(0, 0, W, H);
 
     // Subtle grid for a sense of space
-    g.strokeStyle = 'rgba(34,33,31,0.04)';
+    g.strokeStyle = s.grid;
     g.lineWidth = 1;
     g.beginPath();
     for (let x = 40; x < W; x += 40) {
@@ -205,7 +207,7 @@ export default function mount(ctx) {
 
     // Time bar along the top
     const progress = timeLeft / duration;
-    g.fillStyle = palette.strong;
+    g.fillStyle = s.strong;
     g.fillRect(0, 0, W, 4);
     g.fillStyle = palette.accent;
     g.fillRect(0, 0, W * progress, 4);
@@ -213,10 +215,10 @@ export default function mount(ctx) {
     if (countdown > 0) {
       g.textAlign = 'center';
       g.font = font(72, 700);
-      g.fillStyle = palette.ink;
+      g.fillStyle = s.ink;
       g.fillText(String(Math.ceil(countdown)), W / 2, H / 2 + 24);
       g.font = font(13, 600);
-      g.fillStyle = palette.muted;
+      g.fillStyle = s.muted;
       g.fillText('Get ready', W / 2, H / 2 + 60);
     }
 
@@ -241,7 +243,7 @@ export default function mount(ctx) {
     for (const e of effects) {
       const k = e.t / 0.4;
       g.globalAlpha = 1 - k;
-      g.strokeStyle = e.hit ? palette.accent : palette.faint;
+      g.strokeStyle = e.hit ? palette.accent : s.faint;
       g.lineWidth = 2;
       g.beginPath();
       if (e.hit) g.arc(e.x, e.y, prefersReducedMotion() ? 20 : 10 + k * 30, 0, Math.PI * 2);
@@ -257,6 +259,7 @@ export default function mount(ctx) {
   }
 
   view.onResize(() => render());
+  ctx.onDestroy(onThemeChange(() => render()));
 
   reset();
   render();

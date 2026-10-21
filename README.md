@@ -1,6 +1,6 @@
 # playground.
 
-A small library of original browser games with a calm, editorial look: warm off-white surfaces, charcoal type and a terracotta accent. Everything runs in the browser as a static site. There is no backend, no account and no tracking. Favorites and records are kept in `localStorage` on the player's device.
+A small library of original browser games with a calm, editorial look: deep charcoal or warm off-white surfaces, soft type and a terracotta accent, with a dark and a light theme. Everything runs in the browser as a static site. There is no backend, no account and no tracking. Favorites and records are kept in `localStorage` on the player's device.
 
 The site opens on the game library. From there players can browse categories, search, mark favorites and launch any game. Every game uses the same page layout with a back link, stats, controls, pause/restart and a "play something else" section.
 
@@ -154,9 +154,18 @@ The shell takes care of the page layout, the Pause/Restart buttons, pausing when
 
 Useful parts of `ctx`: `stage`, `toolbar`, `controlsSlot`, `overlay.show/hide`, `setStats`, `setStatus('idle' | 'running' | 'paused' | 'over')`, `storage.getRecord/submitRecord/getPref/setPref`, `showRecords`, `listen`, `onDestroy`.
 
+## Themes
+
+The site has a dark theme (the default for first visits) and a light theme. The round sun/moon button at the right end of the header switches between them instantly, and the choice is remembered in `localStorage` under `playground:theme`.
+
+- All interface colors are CSS variables in `site/css/tokens.css`: `:root` holds the dark palette and `:root[data-theme='light']` the light one. Components and game stylesheets only use these variables, so adjusting a theme means editing one file.
+- A short inline script in the `<head>` of `site/index.html` applies the saved theme before the stylesheets paint, so there is no flash of the wrong theme. `site/js/lib/theme.js` handles switching, saving and notifying games.
+- Canvas games that draw their own light board (Snake, Block Stacker, Breakout, Pong, Aim Trainer, Word Rain) take their board and text colors from `surfaces()` in `site/js/lib/palette.js` and redraw when the theme changes. Scene games (Updraft, Lane Splitter, Asteroid Belt, Dune Runner) keep their own artwork in both themes.
+- If storage is unavailable the site starts in dark mode and the toggle still works for the visit.
+
 ## Saved data
 
-Everything is stored under one `localStorage` key, `playground:v1`:
+Everything except the theme is stored under one `localStorage` key, `playground:v1`:
 
 ```json
 {
@@ -167,7 +176,7 @@ Everything is stored under one `localStorage` key, `playground:v1`:
 }
 ```
 
-Reads are validated, so corrupted or old data falls back to defaults. If storage is blocked (for example in some private modes) the site keeps working for the current visit. The footer has a "Clear saved data" button. No personal information is stored.
+Reads are validated, so corrupted or old data falls back to defaults. If storage is blocked (for example in some private modes) the site keeps working for the current visit. The footer has a "Clear saved data" button, which also forgets the theme choice (the current page keeps its theme until the next visit). No personal information is stored.
 
 ## Accessibility and devices
 
@@ -176,6 +185,7 @@ Reads are validated, so corrupted or old data falls back to defaults. If storage
 - Arrow keys and Space never scroll the page while a game is open, and game shortcuts are ignored while typing in a text field.
 - Touch devices get on-screen buttons, swipes, tap and long-press where it makes sense.
 - `prefers-reduced-motion` turns off interface transitions, tile animations, particles and screen shake.
+- Both themes are designed for readable contrast; the theme toggle has a visible focus ring and an accessible label that says which theme it switches to.
 
 ## Known limitations
 

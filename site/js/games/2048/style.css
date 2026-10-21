@@ -16,7 +16,7 @@
   aspect-ratio: 1;
   padding: var(--t48-gap);
   border-radius: var(--radius-lg);
-  background: #ddd5c4;
+  background: var(--game-board);
   touch-action: none;
   user-select: none;
   -webkit-user-select: none;
@@ -36,7 +36,7 @@
 
 .t48-grid span {
   border-radius: var(--radius-sm);
-  background: #e9e2d3;
+  background: var(--game-cell);
 }
 
 .t48-tile {
@@ -109,14 +109,18 @@
   font-size: clamp(0.8rem, 3.4vw, 1.2rem);
 }
 
+/* Low tiles and the top tiles follow the theme; the colored middle tiles look the same in both. */
 .t48-tile[data-v='2'] {
-  --tile-bg: #f3eee3;
+  --tile-bg: var(--game-tile-2);
+  --tile-fg: var(--game-tile-2-fg);
 }
 .t48-tile[data-v='4'] {
-  --tile-bg: #ebe2cf;
+  --tile-bg: var(--game-tile-4);
+  --tile-fg: var(--game-tile-4-fg);
 }
 .t48-tile[data-v='8'] {
   --tile-bg: #edcaa7;
+  --tile-fg: #22211f;
 }
 .t48-tile[data-v='16'] {
   --tile-bg: #e6ae85;
@@ -147,12 +151,12 @@
   --tile-fg: #fff;
 }
 .t48-tile[data-v='2048'] {
-  --tile-bg: #22211f;
-  --tile-fg: #fbfaf7;
+  --tile-bg: var(--game-tile-top);
+  --tile-fg: var(--game-tile-top-fg);
 }
 .t48-tile.is-super {
-  --tile-bg: #3a3835;
-  --tile-fg: #f4e4da;
+  --tile-bg: var(--game-tile-super);
+  --tile-fg: var(--game-tile-super-fg);
 }
 
 .t48-hint {

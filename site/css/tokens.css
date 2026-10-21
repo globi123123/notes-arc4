@@ -13,51 +13,99 @@
 }
 
 :root {
+  /*
+   * Colors. Dark is the default theme; [data-theme='light'] below swaps in
+   * the light palette. Components only ever use these variables.
+   */
+
   /* Surfaces */
-  --color-bg: #f5f4ef;
-  --color-surface: #fbfaf7;
-  --color-surface-raised: #ffffff;
-  --color-surface-sunken: #efede6;
-  --color-surface-strong: #e7e3d8;
-  --color-overlay: rgba(245, 244, 239, 0.86);
-  --color-scrim: rgba(34, 33, 31, 0.32);
+  --color-bg: #1d1c1a;
+  --color-surface: #262522;
+  --color-surface-raised: #2e2d2a;
+  --color-surface-sunken: #181715;
+  --color-surface-strong: #383632;
+  --color-overlay: rgba(29, 28, 26, 0.84);
+  --color-overlay-light: rgba(29, 28, 26, 0.5);
+  --color-scrim: rgba(0, 0, 0, 0.5);
+  --color-header-bg: rgba(29, 28, 26, 0.86);
+  --color-fav-bg: rgba(38, 37, 34, 0.9);
 
   /* Lines */
-  --color-border: #e3dfd4;
-  --color-border-strong: #d2ccbe;
+  --color-border: #34322e;
+  --color-border-strong: #46433e;
 
   /* Text */
-  --color-text: #22211f;
-  --color-text-secondary: #67645d;
-  --color-text-tertiary: #8b877e;
-  --color-text-inverse: #fbfaf7;
+  --color-text: #ece9e2;
+  --color-text-secondary: #aba79e;
+  --color-text-tertiary: #85817a;
+  --color-text-inverse: #1d1c1a;
+  --color-text-hover: #d8d4cb;
+  --color-inverse-soft: rgba(29, 28, 26, 0.14);
+  --color-on-accent: #ffffff;
 
   /* Accent (terracotta) */
-  --color-accent: #c6613f;
-  --color-accent-hover: #b0532f;
-  --color-accent-ink: #9c4626;
-  --color-accent-soft: #f4e4da;
-  --color-accent-softer: #f8eee8;
+  --color-accent: #d97757;
+  --color-accent-hover: #e3896a;
+  --color-accent-ink: #e8946f;
+  --color-accent-strong: #b85a3b;
+  --color-accent-strong-hover: #c96442;
+  --color-accent-soft: #3b2820;
+  --color-accent-softer: #2f231d;
+  --color-accent-border: rgba(217, 119, 87, 0.42);
+  --color-ring-neutral: rgba(255, 255, 255, 0.08);
 
   /* Supporting muted tones, shared with game artwork */
-  --color-sage: #7c8b6f;
-  --color-sage-soft: #e5e9dd;
-  --color-slate: #5e7389;
-  --color-slate-soft: #e1e6ea;
-  --color-mustard: #d2a44e;
-  --color-mustard-soft: #f3e8cf;
-  --color-rose: #c98a80;
-  --color-clay: #a6714e;
-  --color-teal: #5f8c88;
+  --color-sage: #8f9e82;
+  --color-sage-soft: #283024;
+  --color-slate: #7f95ab;
+  --color-slate-soft: #232a31;
+  --color-mustard: #d9ad5c;
+  --color-mustard-soft: #33291a;
+  --color-rose: #d39a90;
+  --color-clay: #b98262;
+  --color-teal: #75a39e;
 
   /* Feedback */
-  --color-success: #5e7f55;
-  --color-success-soft: #e3ebdc;
-  --color-danger: #b4483a;
-  --color-danger-soft: #f5e0db;
+  --color-success: #95b886;
+  --color-success-soft: #243020;
+  --color-danger: #e5806d;
+  --color-danger-soft: #3b2421;
+
+  /* Game surfaces (DOM-based boards) */
+  --game-board: #34312c;
+  --game-cell: #2a2825;
+  --game-tile-2: #45413a;
+  --game-tile-2-fg: #ece9e2;
+  --game-tile-4: #57503f;
+  --game-tile-4-fg: #f3eee3;
+  --game-tile-top: #ece9e2;
+  --game-tile-top-fg: #1d1c1a;
+  --game-tile-super: #f4e4da;
+  --game-tile-super-fg: #3a3835;
+  --game-cell-hidden: #3a3732;
+  --game-cell-hidden-hover: #45413b;
+  --game-cell-open: #24231f;
+  --game-cell-shine: rgba(255, 255, 255, 0.06);
+  --game-peer: #36332f;
+  --game-card-face: #f1ede4;
+  --game-card-face-border: rgba(0, 0, 0, 0.35);
+  --game-card-matched: #dfe5d6;
+  --game-wait: #26301f;
+  --game-wait-ink: #a9c198;
+  --game-n1: #8fb0d6;
+  --game-n2: #9cc08a;
+  --game-n3: #ec8f71;
+  --game-n4: #b99cdc;
+  --game-n5: #d9a274;
+  --game-n6: #7fc2bc;
+  --game-n7: #ece9e2;
+  --game-n8: #aba79e;
+
+  /* Card illustrations */
+  --thumb-ink: #ece9e2;
 
   /* Focus */
-  --focus-ring: 0 0 0 2px var(--color-bg), 0 0 0 4px rgba(198, 97, 63, 0.7);
+  --focus-ring: 0 0 0 2px var(--color-bg), 0 0 0 4px rgba(217, 119, 87, 0.75);
 
   /* Typography */
   --font-sans:
@@ -103,10 +151,10 @@
   --radius-pill: 999px;
 
   /* Depth */
-  --shadow-xs: 0 1px 1px rgba(34, 33, 31, 0.04);
-  --shadow-sm: 0 1px 2px rgba(34, 33, 31, 0.05), 0 1px 1px rgba(34, 33, 31, 0.03);
-  --shadow-md: 0 10px 24px -14px rgba(34, 33, 31, 0.22), 0 2px 6px -2px rgba(34, 33, 31, 0.06);
-  --shadow-lg: 0 24px 48px -24px rgba(34, 33, 31, 0.28), 0 6px 16px -8px rgba(34, 33, 31, 0.1);
+  --shadow-xs: 0 1px 1px rgba(0, 0, 0, 0.25);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3), 0 1px 1px rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 12px 28px -14px rgba(0, 0, 0, 0.6), 0 2px 6px -2px rgba(0, 0, 0, 0.35);
+  --shadow-lg: 0 28px 56px -24px rgba(0, 0, 0, 0.7), 0 8px 18px -8px rgba(0, 0, 0, 0.4);
 
   /* Layout */
   --container: 1180px;
@@ -120,7 +168,104 @@
   --duration-base: 180ms;
   --duration-slow: 280ms;
 
+  color-scheme: dark;
+}
+
+/* Light theme: warm off-white surfaces, charcoal type, the same terracotta. */
+:root[data-theme='light'] {
+  --color-bg: #f5f4ef;
+  --color-surface: #fbfaf7;
+  --color-surface-raised: #ffffff;
+  --color-surface-sunken: #efede6;
+  --color-surface-strong: #e7e3d8;
+  --color-overlay: rgba(245, 244, 239, 0.86);
+  --color-overlay-light: rgba(245, 244, 239, 0.55);
+  --color-scrim: rgba(34, 33, 31, 0.32);
+  --color-header-bg: rgba(245, 244, 239, 0.88);
+  --color-fav-bg: rgba(251, 250, 247, 0.92);
+
+  --color-border: #e3dfd4;
+  --color-border-strong: #d2ccbe;
+
+  --color-text: #22211f;
+  --color-text-secondary: #67645d;
+  --color-text-tertiary: #8b877e;
+  --color-text-inverse: #fbfaf7;
+  --color-text-hover: #3a3835;
+  --color-inverse-soft: rgba(251, 250, 247, 0.16);
+  --color-on-accent: #ffffff;
+
+  --color-accent: #c6613f;
+  --color-accent-hover: #b0532f;
+  --color-accent-ink: #9c4626;
+  --color-accent-strong: #b5573a;
+  --color-accent-strong-hover: #a14b2f;
+  --color-accent-soft: #f4e4da;
+  --color-accent-softer: #f8eee8;
+  --color-accent-border: rgba(198, 97, 63, 0.38);
+  --color-ring-neutral: rgba(34, 33, 31, 0.08);
+
+  --color-sage: #7c8b6f;
+  --color-sage-soft: #e5e9dd;
+  --color-slate: #5e7389;
+  --color-slate-soft: #e1e6ea;
+  --color-mustard: #d2a44e;
+  --color-mustard-soft: #f3e8cf;
+  --color-rose: #c98a80;
+  --color-clay: #a6714e;
+  --color-teal: #5f8c88;
+
+  --color-success: #5e7f55;
+  --color-success-soft: #e3ebdc;
+  --color-danger: #b4483a;
+  --color-danger-soft: #f5e0db;
+
+  --game-board: #ddd5c4;
+  --game-cell: #e9e2d3;
+  --game-tile-2: #f3eee3;
+  --game-tile-2-fg: #22211f;
+  --game-tile-4: #ebe2cf;
+  --game-tile-4-fg: #22211f;
+  --game-tile-top: #22211f;
+  --game-tile-top-fg: #fbfaf7;
+  --game-tile-super: #3a3835;
+  --game-tile-super-fg: #f4e4da;
+  --game-cell-hidden: #e2ddd0;
+  --game-cell-hidden-hover: #d8d2c3;
+  --game-cell-open: #ffffff;
+  --game-cell-shine: rgba(255, 255, 255, 0.55);
+  --game-peer: #f6f1e8;
+  --game-card-face: #ffffff;
+  --game-card-face-border: #e3dfd4;
+  --game-card-matched: #e5e9dd;
+  --game-wait: #e3e7dc;
+  --game-wait-ink: #5f6d54;
+  --game-n1: #4f6a86;
+  --game-n2: #5e7a4f;
+  --game-n3: #c0573a;
+  --game-n4: #6c4f86;
+  --game-n5: #8f5a33;
+  --game-n6: #3f7f7a;
+  --game-n7: #22211f;
+  --game-n8: #8b877e;
+
+  --thumb-ink: #22211f;
+
+  --focus-ring: 0 0 0 2px var(--color-bg), 0 0 0 4px rgba(198, 97, 63, 0.7);
+
+  --shadow-xs: 0 1px 1px rgba(34, 33, 31, 0.04);
+  --shadow-sm: 0 1px 2px rgba(34, 33, 31, 0.05), 0 1px 1px rgba(34, 33, 31, 0.03);
+  --shadow-md: 0 10px 24px -14px rgba(34, 33, 31, 0.22), 0 2px 6px -2px rgba(34, 33, 31, 0.06);
+  --shadow-lg: 0 24px 48px -24px rgba(34, 33, 31, 0.28), 0 6px 16px -8px rgba(34, 33, 31, 0.1);
+
   color-scheme: light;
+}
+
+/* Switching themes should not animate every hover transition at once. */
+:root.theme-switching *,
+:root.theme-switching *::before,
+:root.theme-switching *::after {
+  transition: none !important;
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="dark">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
@@ -8,8 +8,24 @@
       name="description"
       content="A small library of carefully made browser games: Snake, Block Stacker, 2048, Minesweeper, a motorcycle racer, typing, Sudoku and more. No installs, no accounts."
     />
-    <meta name="theme-color" content="#f5f4ef" />
-    <meta name="color-scheme" content="light" />
+    <meta name="theme-color" content="#1d1c1a" />
+    <meta name="color-scheme" content="dark light" />
+    <script>
+      // Apply the saved theme before the stylesheets paint, so a light-mode
+      // visitor never sees a dark flash. Dark is the default. The key must
+      // match THEME_KEY in js/lib/theme.js.
+      (function () {
+        var theme = 'dark';
+        try {
+          var saved = localStorage.getItem('playground:theme');
+          if (saved === 'light' || saved === 'dark') theme = saved;
+        } catch (e) {}
+        document.documentElement.setAttribute('data-theme', theme);
+        if (theme === 'light') {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#f5f4ef');
+        }
+      })();
+    </script>
     <link rel="icon" href="favicon.svg" type="image/svg+xml" />
     <link rel="preload" href="fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="stylesheet" href="css/tokens.css" />

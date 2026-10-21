@@ -3,7 +3,8 @@
 import { createGameCanvas, fillRoundRect, roundRect } from '../../lib/canvas.js';
 import { createLoop } from '../../lib/loop.js';
 import { attachSwipe, createKeyboard, createTouchControls } from '../../lib/input.js';
-import { font, palette } from '../../lib/palette.js';
+import { font, palette, surfaces } from '../../lib/palette.js';
+import { onThemeChange } from '../../lib/theme.js';
 import { prefersReducedMotion } from '../../lib/motion.js';
 import {
   COLS,
@@ -338,12 +339,13 @@ export default function mount(ctx) {
   }
 
   function render() {
-    g.fillStyle = palette.sunken;
+    const s = surfaces();
+    g.fillStyle = s.frame;
     g.fillRect(0, 0, WIDTH, BOARD_H);
 
     // Board background and faint grid
-    fillRoundRect(g, 0, 0, BOARD_W, BOARD_H, 10, palette.cream);
-    g.strokeStyle = 'rgba(34,33,31,0.045)';
+    fillRoundRect(g, 0, 0, BOARD_W, BOARD_H, 10, s.board);
+    g.strokeStyle = s.grid;
     g.lineWidth = 1;
     g.beginPath();
     for (let x = 1; x < COLS; x += 1) {
@@ -365,8 +367,8 @@ export default function mount(ctx) {
         if (!type) return;
         if (flashing?.has(y)) {
           const k = clearing.t / CLEAR_ANIMATION;
-          fillRoundRect(g, x * CELL + 1.5, y * CELL + 1.5, CELL - 3, CELL - 3, 5, palette.ink);
-          drawCell(x, y, palette.cream, 1 - k);
+          fillRoundRect(g, x * CELL + 1.5, y * CELL + 1.5, CELL - 3, CELL - 3, 5, s.ink);
+          drawCell(x, y, s.board, 1 - k);
         } else drawCell(x, y, COLORS[type]);
       }),
     );
@@ -387,29 +389,30 @@ export default function mount(ctx) {
     }
 
     // Side panel
-    g.fillStyle = palette.muted;
+    g.fillStyle = s.muted;
     g.font = font(12, 600);
     g.textAlign = 'left';
     g.fillText('NEXT', SIDE_X, 22);
-    fillRoundRect(g, SIDE_X, 32, WIDTH - SIDE_X - 6, 96, 12, palette.cream);
+    fillRoundRect(g, SIDE_X, 32, WIDTH - SIDE_X - 6, 96, 12, s.board);
     if (nextType) drawPreview(nextType, SIDE_X + (WIDTH - SIDE_X - 6) / 2, 80, 22);
 
-    g.fillStyle = palette.muted;
+    g.fillStyle = s.muted;
     g.fillText('LEVEL', SIDE_X, 162);
-    g.fillStyle = palette.ink;
+    g.fillStyle = s.ink;
     g.font = font(26, 650);
     g.fillText(String(level), SIDE_X, 192);
 
     // Progress toward the next level
     const progress = (lines % 10) / 10;
-    fillRoundRect(g, SIDE_X, 206, WIDTH - SIDE_X - 6, 6, 3, palette.strong);
+    fillRoundRect(g, SIDE_X, 206, WIDTH - SIDE_X - 6, 6, 3, s.strong);
     if (progress > 0) fillRoundRect(g, SIDE_X, 206, (WIDTH - SIDE_X - 6) * progress, 6, 3, palette.accent);
-    g.fillStyle = palette.muted;
+    g.fillStyle = s.muted;
     g.font = font(11, 500);
     g.fillText(`${10 - (lines % 10)} lines to go`, SIDE_X, 230);
   }
 
   view.onResize(() => render());
+  ctx.onDestroy(onThemeChange(() => render()));
 
   reset();
   render();

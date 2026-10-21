@@ -499,6 +499,116 @@ try {
     await page.fill('#site-search', '');
   });
 
+  // ---------- Theme
+  const bgOf = (p) => p.evaluate(() => getComputedStyle(document.body).backgroundColor);
+  const DARK_BG = 'rgb(29, 28, 26)';
+  const LIGHT_BG = 'rgb(245, 244, 239)';
+
+  await check('theme: first visit is dark', async () => {
+    const fresh = await browser.newContext({ viewport: { width: 1280, height: 900 } });
+    const tpage = await openPage(fresh);
+    await tpage.goto(BASE);
+    await tpage.waitForSelector('.game-card');
+    assert((await tpage.getAttribute('html', 'data-theme')) === 'dark', 'default theme is dark');
+    assert((await bgOf(tpage)) === DARK_BG, `dark background, got ${await bgOf(tpage)}`);
+    assert((await tpage.getAttribute('.theme-toggle', 'aria-label')) === 'Switch to light mode', 'toggle label');
+    assert(tpage.problems.length === 0, tpage.problems.join('\n'));
+    await fresh.close();
+  });
+
+  await check('theme: toggle switches instantly and persists across reloads', async () => {
+    const fresh = await browser.newContext({ viewport: { width: 1280, height: 900 } });
+    const tpage = await openPage(fresh);
+    await tpage.goto(BASE);
+    await tpage.waitForSelector('.game-card');
+    await tpage.evaluate(() => (window.__sameDocument = true));
+    await tpage.click('.theme-toggle');
+    assert((await tpage.getAttribute('html', 'data-theme')) === 'light', 'switched to light');
+    assert((await bgOf(tpage)) === LIGHT_BG, `light background, got ${await bgOf(tpage)}`);
+    assert(await tpage.evaluate(() => window.__sameDocument === true), 'switching did not reload the page');
+    assert((await tpage.getAttribute('.theme-toggle', 'aria-label')) === 'Switch to dark mode', 'label follows');
+    assert(
+      (await tpage.getAttribute('meta[name="theme-color"]', 'content')) === '#f5f4ef',
+      'browser theme color follows',
+    );
+    await tpage.reload();
+    await tpage.waitForSelector('.game-card');
+    assert((await tpage.getAttribute('html', 'data-theme')) === 'light', 'light kept after reload');
+    await tpage.click('.theme-toggle');
+    await tpage.reload();
+    await tpage.waitForSelector('.game-card');
+    assert((await tpage.getAttribute('html', 'data-theme')) === 'dark', 'dark kept after reload');
+    // Keyboard users can reach and use the toggle too.
+    await tpage.focus('.theme-toggle');
+    await tpage.keyboard.press('Enter');
+    assert((await tpage.getAttribute('html', 'data-theme')) === 'light', 'Enter toggles');
+    assert(tpage.problems.length === 0, tpage.problems.join('\n'));
+    await fresh.close();
+  });
+
+  await check('theme: the first painted frame already uses the saved theme', async () => {
+    const fresh = await browser.newContext({ viewport: { width: 1280, height: 900 } });
+    await fresh.addInitScript(() => {
+      localStorage.setItem('playground:theme', 'light');
+      requestAnimationFrame(() => {
+        window.__firstBg = getComputedStyle(document.documentElement).getPropertyValue('--color-bg').trim();
+      });
+    });
+    const tpage = await openPage(fresh);
+    await tpage.goto(BASE);
+    await tpage.waitForSelector('.game-card');
+    const first = await tpage.evaluate(() => window.__firstBg);
+    assert(first === '#f5f4ef', `first frame background was ${first}`);
+    await fresh.close();
+  });
+
+  await check('theme: game pages and canvases repaint when switching', async () => {
+    const fresh = await browser.newContext({ viewport: { width: 1280, height: 900 } });
+    const tpage = await openPage(fresh);
+    const pixel = () =>
+      tpage.evaluate(() => {
+        const c = document.querySelector('.game-canvas');
+        const [r, g, b] = c.getContext('2d').getImageData(4, 4, 1, 1).data;
+        return `${r},${g},${b}`;
+      });
+    await tpage.goto(`${BASE}#/play/snake`);
+    await tpage.waitForSelector('.game-canvas');
+    const darkPixel = await pixel();
+    await tpage.click('.theme-toggle');
+    await sleep(100);
+    const lightPixel = await pixel();
+    assert(darkPixel !== lightPixel, `snake board did not repaint (${darkPixel} -> ${lightPixel})`);
+    // Top-left square of the checkerboard uses the alternate board tone.
+    assert(darkPixel === '43,42,38' && lightPixel === '243,239,229', `board tones ${darkPixel} / ${lightPixel}`);
+    const stageBg = await tpage.evaluate(() => getComputedStyle(document.querySelector('.stage')).backgroundColor);
+    assert(stageBg === 'rgb(239, 237, 230)', `stage follows theme, got ${stageBg}`);
+    await tpage.goto(`${BASE}#/play/2048`);
+    await tpage.waitForSelector('.t48-tile');
+    const tile = await tpage.evaluate(() => getComputedStyle(document.querySelector('.t48-board')).backgroundColor);
+    assert(tile === 'rgb(221, 213, 196)', `2048 board uses the light token, got ${tile}`);
+    assert(tpage.problems.length === 0, tpage.problems.join('\n'));
+    await fresh.close();
+  });
+
+  await check('theme: works when storage is blocked', async () => {
+    const fresh = await browser.newContext({ viewport: { width: 1280, height: 900 } });
+    await fresh.addInitScript(() => {
+      Object.defineProperty(window, 'localStorage', {
+        get() {
+          throw new Error('storage blocked');
+        },
+      });
+    });
+    const tpage = await openPage(fresh);
+    await tpage.goto(BASE);
+    await tpage.waitForSelector('.game-card');
+    assert((await tpage.getAttribute('html', 'data-theme')) === 'dark', 'falls back to dark');
+    await tpage.click('.theme-toggle');
+    assert((await tpage.getAttribute('html', 'data-theme')) === 'light', 'toggle still works');
+    assert(tpage.problems.length === 0, tpage.problems.join('\n'));
+    await fresh.close();
+  });
+
   if (page.problems.length)
     (results.push(`  FAIL  library had problems:\n        ${page.problems.join('\n        ')}`), (failures += 1));
 
@@ -536,6 +646,10 @@ try {
     await mpage.waitForSelector('.game-card');
     const overflow = () => mpage.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
     assert((await overflow()) <= 0, `library overflows by ${await overflow()}px`);
+    assert(await mpage.isVisible('.theme-toggle'), 'theme toggle visible on mobile');
+    await mpage.tap('.theme-toggle');
+    assert((await mpage.getAttribute('html', 'data-theme')) === 'light', 'toggle works by touch');
+    assert((await overflow()) <= 0, 'no overflow after switching theme');
     for (const game of games) {
       await openGame(mpage, game.id);
       await sleep(150);

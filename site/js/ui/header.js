@@ -1,8 +1,9 @@
-/** Site header: brand, compact navigation, search and the game count. */
+/** Site header: brand, compact navigation, search, the game count and the theme switch. */
 
 import { SITE } from '../config.js';
 import { h } from '../lib/dom.js';
 import { isTypingTarget } from '../lib/input.js';
+import { getTheme, onThemeChange, toggleTheme } from '../lib/theme.js';
 import { appState } from '../state.js';
 import { games } from '../games/registry.js';
 import { libraryHref, navigate, gameHref } from '../router.js';
@@ -50,6 +51,19 @@ export function createHeader({ getRoute, onShowLibrary }) {
     h('span', { class: 'visually-hidden' }, ' game'),
   );
 
+  // Shows the theme you would switch to: a sun in dark mode, a moon in light mode.
+  const themeButton = h('button', { type: 'button', class: 'theme-toggle' });
+  themeButton.addEventListener('click', () => toggleTheme());
+  function syncThemeButton(theme = getTheme()) {
+    const next = theme === 'dark' ? 'light' : 'dark';
+    themeButton.innerHTML = icon(theme === 'dark' ? 'sun' : 'moon');
+    themeButton.setAttribute('aria-label', `Switch to ${next} mode`);
+    themeButton.title = `Switch to ${next} mode`;
+    themeButton.dataset.theme = theme;
+  }
+  syncThemeButton();
+  onThemeChange(syncThemeButton);
+
   const header = h(
     'header',
     { class: 'site-header' },
@@ -80,6 +94,7 @@ export function createHeader({ getRoute, onShowLibrary }) {
           h('span', { class: 'count-pill__dot', 'aria-hidden': 'true' }),
           `${games.length} games`,
         ),
+        themeButton,
       ),
     ),
   );

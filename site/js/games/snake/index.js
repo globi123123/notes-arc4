@@ -3,7 +3,8 @@
 import { createGameCanvas, fillRoundRect } from '../../lib/canvas.js';
 import { createLoop } from '../../lib/loop.js';
 import { attachSwipe, createKeyboard, createTouchControls } from '../../lib/input.js';
-import { palette } from '../../lib/palette.js';
+import { palette, surfaces } from '../../lib/palette.js';
+import { onThemeChange } from '../../lib/theme.js';
 import { prefersReducedMotion } from '../../lib/motion.js';
 import { createState, queueDirection, step, tickInterval } from './logic.js';
 
@@ -134,9 +135,10 @@ export default function mount(ctx) {
   const mix = (a, b, t) => ({ x: a.x + (b.x - a.x) * t, y: a.y + (b.y - a.y) * t });
 
   function drawBoard() {
-    g.fillStyle = palette.cream;
+    const s = surfaces();
+    g.fillStyle = s.board;
     g.fillRect(0, 0, view.width, view.height);
-    g.fillStyle = '#f3efe5';
+    g.fillStyle = s.boardAlt;
     for (let y = 0; y < ROWS; y += 1) {
       for (let x = y % 2; x < COLS; x += 2) g.fillRect(x * CELL, y * CELL, CELL, CELL);
     }
@@ -176,21 +178,21 @@ export default function mount(ctx) {
 
     g.lineCap = 'round';
     g.lineJoin = 'round';
-    g.strokeStyle = state.dead ? palette.faint : palette.sageDeep;
+    g.strokeStyle = state.dead ? surfaces().faint : palette.sageDeep;
     g.lineWidth = CELL * 0.72;
     g.beginPath();
     points.forEach((p, i) => (i === 0 ? g.moveTo(p.x, p.y) : g.lineTo(p.x, p.y)));
     if (points.length === 1) g.lineTo(points[0].x + 0.01, points[0].y);
     g.stroke();
 
-    g.strokeStyle = state.dead ? palette.borderStrong : palette.sage;
+    g.strokeStyle = state.dead ? surfaces().lineStrong : palette.sage;
     g.lineWidth = CELL * 0.36;
     g.stroke();
 
     // Head with eyes looking in the travel direction
     const head = points[0];
     const dir = { up: [0, -1], down: [0, 1], left: [-1, 0], right: [1, 0] }[state.dir];
-    g.fillStyle = state.dead ? palette.muted : palette.sageDeep;
+    g.fillStyle = state.dead ? surfaces().muted : palette.sageDeep;
     g.beginPath();
     g.arc(head.x, head.y, CELL * 0.42, 0, Math.PI * 2);
     g.fill();
@@ -209,11 +211,12 @@ export default function mount(ctx) {
     }
 
     if (state.dead) {
-      fillRoundRect(g, 0, 0, view.width, view.height, 0, 'rgba(245,244,239,0.25)');
+      fillRoundRect(g, 0, 0, view.width, view.height, 0, surfaces().veil);
     }
   }
 
   view.onResize(() => render());
+  ctx.onDestroy(onThemeChange(() => render()));
 
   reset();
   render();

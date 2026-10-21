@@ -134,7 +134,7 @@
 }
 
 .category-tab[aria-selected='true'] .category-tab__count {
-  background: rgba(251, 250, 247, 0.16);
+  background: var(--color-inverse-soft);
   color: var(--color-text-inverse);
 }
 
@@ -213,13 +213,49 @@
   overflow: hidden;
 }
 
+/*
+ * Card illustrations carry a light and a dark background color
+ * (--tb-light / --tb-dark on the <svg>); elements drawn with currentColor
+ * follow --thumb-ink. Everything else in the artwork stays as drawn.
+ */
+.thumb {
+  --tb: var(--tb-dark, var(--tb-light));
+  color: var(--thumb-ink);
+}
+
+:root[data-theme='light'] .thumb {
+  --tb: var(--tb-light);
+}
+
+.thumb .tb {
+  fill: var(--tb);
+}
+
 .game-card__media svg {
   width: 100%;
   height: 100%;
   transition: transform var(--duration-slow) var(--ease-out);
 }
 
-.game-card:hover .game-card__media svg {
+.game-card:hover /*
+ * Card illustrations carry a light and a dark background color
+ * (--tb-light / --tb-dark on the <svg>); elements drawn with currentColor
+ * follow --thumb-ink. Everything else in the artwork stays as drawn.
+ */
+.thumb {
+  --tb: var(--tb-dark, var(--tb-light));
+  color: var(--thumb-ink);
+}
+
+:root[data-theme='light'] .thumb {
+  --tb: var(--tb-light);
+}
+
+.thumb .tb {
+  fill: var(--tb);
+}
+
+.game-card__media svg {
   transform: scale(1.025);
 }
 
@@ -262,7 +298,7 @@
 }
 
 .game-card__link:focus-visible::after {
-  box-shadow: inset 0 0 0 2px rgba(198, 97, 63, 0.75);
+  box-shadow: inset 0 0 0 2px var(--color-accent);
 }
 
 .game-card__desc {
@@ -300,7 +336,8 @@
 }
 
 .game-card:hover .game-card__play {
-  background: var(--color-accent);
+  background: var(--color-accent-strong);
+  color: var(--color-on-accent);
 }
 
 .game-card__record {
@@ -325,7 +362,7 @@
   height: 34px;
   border: 1px solid var(--color-border);
   border-radius: 50%;
-  background: rgba(251, 250, 247, 0.92);
+  background: var(--color-fav-bg);
   color: var(--color-text-secondary);
   box-shadow: var(--shadow-xs);
   -webkit-tap-highlight-color: transparent;

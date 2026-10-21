@@ -27,13 +27,20 @@ const C = {
 
 const FONT = 'Inter, ui-sans-serif, system-ui, sans-serif';
 
-const svg = (body, bg) =>
-  `<svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false"><rect width="320" height="200" fill="${bg}"/>${body}</svg>`;
+/**
+ * Wraps artwork in an <svg>. `bg` is the light-theme background, `darkBg`
+ * the dark-theme one (omit it for scenes that look the same in both). The
+ * CSS in library.css picks the right one; elements drawn with currentColor
+ * follow the theme's ink color.
+ */
+const svg = (body, bg, darkBg) =>
+  `<svg class="thumb" style="--tb-light: ${bg};${darkBg ? ` --tb-dark: ${darkBg};` : ''}" viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false"><rect class="tb" width="320" height="200" fill="${bg}"/>${body}</svg>`;
 
 function snake() {
   let dots = '';
   for (let x = 20; x < 320; x += 20)
-    for (let y = 20; y < 200; y += 20) dots += `<circle cx="${x}" cy="${y}" r="1.2" fill="${C.line}"/>`;
+    for (let y = 20; y < 200; y += 20)
+      dots += `<circle cx="${x}" cy="${y}" r="1.2" fill="currentColor" opacity=".22"/>`;
   return svg(
     `${dots}
     <path d="M60 140 H140 V80 H220 V120 H250" fill="none" stroke="${C.sageDeep}" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>
@@ -41,6 +48,7 @@ function snake() {
     <circle cx="252" cy="116" r="2.2" fill="${C.cream}"/><circle cx="252" cy="124" r="2.2" fill="${C.cream}"/>
     <circle cx="250" cy="160" r="9" fill="${C.accent}"/><path d="M250 151c1-4 4-6 7-6" stroke="${C.sageDeep}" stroke-width="2" fill="none" stroke-linecap="round"/>`,
     '#eef0e8',
+    '#232821',
   );
 }
 
@@ -99,6 +107,7 @@ function blocks() {
     ${ghost}${cells.map(([x, y, c]) => cell(x, y, c)).join('')}
     <rect x="70" y="${10 + 9 * s + s}" width="180" height="2" fill="${C.line}"/>`,
     '#f1ece3',
+    '#2a2723',
   );
 }
 
@@ -138,6 +147,7 @@ function t2048() {
   return svg(
     `<rect x="${ox - 8}" y="${oy - 8}" width="${size * 4 + gap * 3 + 16}" height="${size * 4 + gap * 3 + 16}" rx="12" fill="#ddd5c4"/>${body}`,
     C.mustardSoft,
+    '#2c2820',
   );
 }
 
@@ -195,6 +205,7 @@ function minesweeper() {
   return svg(
     `<rect x="${ox - 8}" y="${oy - 8}" width="${cols * s + 16}" height="${rows * s + 16}" rx="10" fill="${C.cream}" stroke="${C.line}"/>${body}`,
     C.slateSoft,
+    '#22272c',
   );
 }
 
@@ -210,22 +221,24 @@ function breakout() {
   return svg(
     `${bricks}
     <path d="M196 102 L168 150" stroke="${C.muted}" stroke-width="1.5" stroke-dasharray="2 5" stroke-linecap="round"/>
-    <circle cx="168" cy="150" r="6" fill="${C.ink}"/>
-    <rect x="128" y="172" width="64" height="9" rx="4.5" fill="${C.ink}"/>`,
+    <circle cx="168" cy="150" r="6" fill="currentColor"/>
+    <rect x="128" y="172" width="64" height="9" rx="4.5" fill="currentColor"/>`,
     C.accentSoft,
+    '#2f221d',
   );
 }
 
 function pong() {
   return svg(
-    `<path d="M160 18 V182" stroke="${C.line}" stroke-width="3" stroke-dasharray="8 8" stroke-linecap="round"/>
-    <text x="118" y="56" text-anchor="middle" font-family="${FONT}" font-weight="600" font-size="34" fill="${C.line}">3</text>
-    <text x="202" y="56" text-anchor="middle" font-family="${FONT}" font-weight="600" font-size="34" fill="${C.line}">2</text>
-    <rect x="34" y="78" width="10" height="52" rx="5" fill="${C.ink}"/>
+    `<path d="M160 18 V182" stroke="currentColor" opacity=".22" stroke-width="3" stroke-dasharray="8 8" stroke-linecap="round"/>
+    <text x="118" y="56" text-anchor="middle" font-family="${FONT}" font-weight="600" font-size="34" fill="currentColor" opacity=".22">3</text>
+    <text x="202" y="56" text-anchor="middle" font-family="${FONT}" font-weight="600" font-size="34" fill="currentColor" opacity=".22">2</text>
+    <rect x="34" y="78" width="10" height="52" rx="5" fill="currentColor"/>
     <rect x="276" y="104" width="10" height="52" rx="5" fill="${C.slate}"/>
     <path d="M60 104 L188 128" stroke="${C.accent}" stroke-width="2" stroke-dasharray="1 7" stroke-linecap="round" opacity=".6"/>
     <circle cx="196" cy="130" r="7" fill="${C.accent}"/>`,
     C.sunken,
+    '#232220',
   );
 }
 
@@ -248,6 +261,7 @@ function updraft() {
     </g>
     <path d="M40 112 h22 M48 120 h14" stroke="${C.cream}" stroke-width="2.5" stroke-linecap="round"/>`,
     '#e6eeec',
+    '#1f2628',
   );
 }
 
@@ -296,6 +310,7 @@ function laneSplitter() {
     </g>
     <path d="M150 196 v-8 M170 196 v-8" stroke="${C.cream}" stroke-width="2" stroke-linecap="round" opacity=".5"/>`,
     '#ebe2d1',
+    '#2a2621',
   );
 }
 
@@ -376,6 +391,7 @@ function aimTrainer() {
       <circle r="12" fill="none"/><path d="M0 -20 v10 M0 10 v10 M-20 0 h10 M10 0 h10"/>
     </g>`,
     '#f1efe9',
+    '#24231f',
   );
 }
 
@@ -394,6 +410,7 @@ function wordRain() {
     <text x="74" y="179" font-family="${FONT}" font-weight="600" font-size="13" fill="${C.ink}">qui</text>
     <rect x="98" y="168" width="1.5" height="13" fill="${C.accent}"/>`,
     C.slateSoft,
+    '#21262b',
   );
 }
 
@@ -411,6 +428,7 @@ function pairs() {
     `${card(xs[0], 34, circle)}${card(xs[1], 34, null)}${card(xs[2], 34, tri)}${card(xs[3], 34, null)}
     ${card(xs[0], 104, null)}${card(xs[1], 104, circle)}${card(xs[2], 104, null)}${card(xs[3], 104, sq)}`,
     '#f2ede4',
+    '#29261f',
   );
 }
 
@@ -467,7 +485,7 @@ function sudoku() {
     const [x, y] = key.split(',').map(Number);
     body += `<text x="${ox + x * s + s / 2}" y="${oy + y * s + s / 2 + 4.5}" text-anchor="middle" font-family="${FONT}" font-weight="600" font-size="11" fill="${C.accent}">${n}</text>`;
   }
-  return svg(body, '#f4f1ea');
+  return svg(body, '#f4f1ea', '#262420');
 }
 
 function reactionTime() {
@@ -492,6 +510,7 @@ function echo() {
     `${tiles}
     <g fill="${C.muted}"><circle cx="134" cy="172" r="3.5" fill="${C.accent}"/><circle cx="148" cy="172" r="3.5" fill="${C.accent}"/><circle cx="162" cy="172" r="3.5" fill="${C.accent}"/><circle cx="176" cy="172" r="3.5" opacity=".4"/><circle cx="190" cy="172" r="3.5" opacity=".4"/></g>`,
     '#edefe8',
+    '#242822',
   );
 }
 

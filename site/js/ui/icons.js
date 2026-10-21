@@ -37,6 +37,8 @@ const paths = {
   sparkle:
     '<path d="M12 4c.6 3.9 2.3 5.6 6.2 6.2-3.9.6-5.6 2.3-6.2 6.2-.6-3.9-2.3-5.6-6.2-6.2C9.7 9.6 11.4 7.9 12 4Z"/>',
   clock: '<circle cx="12" cy="12" r="8"/><path d="M12 7.5V12l3 2"/>',
+  sun: '<circle cx="12" cy="12" r="4"/><path d="M12 2.75v2M12 19.25v2M4.75 12h-2M21.25 12h-2M6.87 6.87 5.46 5.46M18.54 18.54l-1.41-1.41M6.87 17.13l-1.41 1.41M18.54 5.46l-1.41 1.41"/>',
+  moon: '<path d="M19.5 14.6A7.75 7.75 0 0 1 9.4 4.5a7.75 7.75 0 1 0 10.1 10.1Z"/>',
   trophy:
     '<path d="M8 4.5h8v4.5a4 4 0 0 1-8 0V4.5Z"/><path d="M8 6.5H5.5a2.5 2.5 0 0 0 3 3.6M16 6.5h2.5a2.5 2.5 0 0 1-3 3.6M12 13v3.5M8.5 20h7M9.5 20l.5-3.5h4l.5 3.5"/>',
   dice: '<rect x="4.5" y="4.5" width="15" height="15" rx="3"/><circle cx="9" cy="9" r="1" fill="currentColor"/><circle cx="15" cy="15" r="1" fill="currentColor"/><circle cx="15" cy="9" r="1" fill="currentColor"/><circle cx="9" cy="15" r="1" fill="currentColor"/>',

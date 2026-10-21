@@ -14,7 +14,7 @@
   top: 0;
   z-index: 20;
   border-bottom: 1px solid transparent;
-  background: rgba(245, 244, 239, 0.88);
+  background: var(--color-header-bg);
   -webkit-backdrop-filter: saturate(1.4) blur(10px);
   backdrop-filter: saturate(1.4) blur(10px);
   transition: border-color var(--duration-base) var(--ease-out);
@@ -126,12 +126,54 @@
   background: var(--color-accent);
 }
 
+/* Theme switch: a quiet round icon button at the end of the header. */
+.theme-toggle {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--color-border);
+  border-radius: 50%;
+  background: var(--color-surface);
+  color: var(--color-text-secondary);
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    color var(--duration-fast) var(--ease-out),
+    background-color var(--duration-fast) var(--ease-out),
+    border-color var(--duration-fast) var(--ease-out);
+}
+
+.theme-toggle svg {
+  width: 17px;
+  height: 17px;
+  transition: transform var(--duration-slow) var(--ease-out);
+}
+
+.theme-toggle:hover {
+  border-color: var(--color-border-strong);
+  background: var(--color-surface-raised);
+  color: var(--color-accent);
+}
+
+.theme-toggle:hover svg {
+  transform: rotate(-18deg);
+}
+
+.theme-toggle:active svg {
+  transform: rotate(-18deg) scale(0.9);
+}
+
+.theme-toggle:focus-visible {
+  border-radius: 50%;
+}
+
 @media (max-width: 760px) {
   .site-header__inner {
-    grid-template-columns: auto 1fr auto;
+    grid-template-columns: auto 1fr auto auto;
     grid-template-areas:
-      'brand nav count'
-      'search search search';
+      'brand nav count theme'
+      'search search search search';
     gap: var(--space-2) var(--space-3);
     padding-block: var(--space-2) var(--space-3);
   }
@@ -147,6 +189,10 @@
 
   .count-pill {
     grid-area: count;
+  }
+
+  .theme-toggle {
+    grid-area: theme;
   }
 
   .site-nav {
@@ -169,8 +215,8 @@
 
   .site-header__inner {
     grid-template-areas:
-      'brand nav nav'
-      'search search search';
+      'brand nav nav theme'
+      'search search search search';
   }
 
   .site-nav__link {

@@ -7,6 +7,7 @@ import { SITE, siteTitle } from './config.js';
 import { h, toast } from './lib/dom.js';
 import { isTypingTarget } from './lib/input.js';
 import { persistence } from './lib/storage.js';
+import { forgetTheme, initTheme } from './lib/theme.js';
 import { appState } from './state.js';
 import { gameById } from './games/registry.js';
 import { libraryHref, navigate, startRouter } from './router.js';
@@ -14,6 +15,8 @@ import { createHeader } from './ui/header.js';
 import { createLibrary } from './ui/library.js';
 import { createGameView } from './ui/gameShell.js';
 import { syncFavoriteButtons } from './ui/gameCard.js';
+
+initTheme();
 
 const app = document.getElementById('app');
 
@@ -68,6 +71,8 @@ app.replaceChildren(skipLink, header.element, main, footer);
 function clearData() {
   if (!window.confirm(`Remove all favorites, records and settings saved by ${siteTitle()} on this device?`)) return;
   persistence.clearAll();
+  // The current theme stays for this visit; the next visit starts in the default.
+  forgetTheme();
   toast('Saved data cleared');
 }
 

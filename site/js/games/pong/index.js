@@ -3,7 +3,8 @@
 import { createGameCanvas, fillRoundRect } from '../../lib/canvas.js';
 import { createLoop } from '../../lib/loop.js';
 import { createKeyboard, createTouchControls } from '../../lib/input.js';
-import { font, palette } from '../../lib/palette.js';
+import { font, palette, surfaces } from '../../lib/palette.js';
+import { onThemeChange } from '../../lib/theme.js';
 import { clamp, randomRange } from '../../lib/random.js';
 import { segmented } from '../../ui/components.js';
 
@@ -264,10 +265,11 @@ export default function mount(ctx) {
   // ----- Rendering -----
 
   function render() {
-    g.fillStyle = palette.cream;
+    const s = surfaces();
+    g.fillStyle = s.board;
     g.fillRect(0, 0, W, H);
 
-    g.strokeStyle = palette.border;
+    g.strokeStyle = s.line;
     g.lineWidth = 3;
     g.setLineDash([10, 12]);
     g.beginPath();
@@ -276,13 +278,13 @@ export default function mount(ctx) {
     g.stroke();
     g.setLineDash([]);
 
-    g.fillStyle = palette.strong;
+    g.fillStyle = s.strong;
     g.font = font(64, 650);
     g.textAlign = 'center';
     g.fillText(String(scores.player), W / 2 - 70, 84);
     g.fillText(String(scores.cpu), W / 2 + 70, 84);
 
-    fillRoundRect(g, PLAYER_X, player.y, PADDLE_W, PADDLE_H, 6, palette.ink);
+    fillRoundRect(g, PLAYER_X, player.y, PADDLE_W, PADDLE_H, 6, s.ink);
     fillRoundRect(g, CPU_X, cpu.y, PADDLE_W, PADDLE_H, 6, palette.slate);
 
     g.fillStyle = palette.accent;
@@ -290,13 +292,14 @@ export default function mount(ctx) {
     g.arc(ball.x, ball.y, BALL_R, 0, Math.PI * 2);
     g.fill();
 
-    g.fillStyle = palette.faint;
+    g.fillStyle = s.faint;
     g.font = font(11, 600);
     g.fillText('YOU', W / 2 - 70, 106);
     g.fillText('COMPUTER', W / 2 + 70, 106);
   }
 
   view.onResize(() => render());
+  ctx.onDestroy(onThemeChange(() => render()));
 
   reset();
   render();

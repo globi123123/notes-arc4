@@ -83,11 +83,11 @@
 }
 
 .sdk-cell.is-peer {
-  background: #f6f1e8;
+  background: var(--game-peer);
 }
 
 .sdk-cell.is-same {
-  background: var(--color-accent-softer);
+  background: color-mix(in srgb, var(--color-accent) 16%, var(--color-surface-raised));
 }
 
 .sdk-cell.is-selected {
@@ -177,7 +177,7 @@
 }
 
 .sdk-tool[aria-pressed='true'] {
-  border-color: rgba(198, 97, 63, 0.4);
+  border-color: var(--color-accent-border);
   background: var(--color-accent-soft);
   color: var(--color-accent-ink);
 }

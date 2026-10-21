@@ -34,10 +34,10 @@
   width: 100%;
   height: 100%;
   border-radius: 5px;
-  background: #e2ddd0;
+  background: var(--game-cell-hidden);
   box-shadow:
     inset 0 -2px 0 rgba(34, 33, 31, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.55);
+    inset 0 1px 0 var(--game-cell-shine);
   color: var(--color-text);
   font-size: calc(var(--ms-cell) * 0.5);
   font-weight: 700;
@@ -47,7 +47,7 @@
 }
 
 .ms-cell:hover:not(.is-open) {
-  background: #d8d2c3;
+  background: var(--game-cell-hidden-hover);
 }
 
 .ms-cell:focus-visible {
@@ -62,7 +62,7 @@
 }
 
 .ms-cell.is-open {
-  background: var(--color-surface-raised);
+  background: var(--game-cell-open);
   box-shadow: inset 0 0 0 1px var(--color-border);
   cursor: default;
 }
@@ -83,30 +83,30 @@
 .ms-cell.is-exploded {
   background: var(--color-accent);
   box-shadow: none;
-  color: #fff;
+  color: var(--color-on-accent);
 }
 
 .ms-cell[data-n='1'] {
-  color: #4f6a86;
+  color: var(--game-n1);
 }
 .ms-cell[data-n='2'] {
-  color: #5e7a4f;
+  color: var(--game-n2);
 }
 .ms-cell[data-n='3'] {
-  color: #c0573a;
+  color: var(--game-n3);
 }
 .ms-cell[data-n='4'] {
-  color: #6c4f86;
+  color: var(--game-n4);
 }
 .ms-cell[data-n='5'] {
-  color: #8f5a33;
+  color: var(--game-n5);
 }
 .ms-cell[data-n='6'] {
-  color: #3f7f7a;
+  color: var(--game-n6);
 }
 .ms-cell[data-n='7'] {
-  color: #22211f;
+  color: var(--game-n7);
 }
 .ms-cell[data-n='8'] {
-  color: #8b877e;
+  color: var(--game-n8);
 }
