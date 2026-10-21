@@ -237,25 +237,7 @@
   transition: transform var(--duration-slow) var(--ease-out);
 }
 
-.game-card:hover /*
- * Card illustrations carry a light and a dark background color
- * (--tb-light / --tb-dark on the <svg>); elements drawn with currentColor
- * follow --thumb-ink. Everything else in the artwork stays as drawn.
- */
-.thumb {
-  --tb: var(--tb-dark, var(--tb-light));
-  color: var(--thumb-ink);
-}
-
-:root[data-theme='light'] .thumb {
-  --tb: var(--tb-light);
-}
-
-.thumb .tb {
-  fill: var(--tb);
-}
-
-.game-card__media svg {
+.game-card:hover .game-card__media svg {
   transform: scale(1.025);
 }
 
@@ -388,6 +370,7 @@
 
 .fav-btn:focus-visible {
   border-radius: 50%;
+  box-shadow: var(--focus-ring);
 }
 
 .fav-btn[aria-pressed='true'] {

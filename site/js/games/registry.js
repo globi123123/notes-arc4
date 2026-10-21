@@ -139,7 +139,7 @@ export const games = [
     difficultyLabel: 'Medium',
     tags: ['bricks', 'paddle', 'ball'],
     howTo:
-      'Bounce the ball off your paddle to break bricks. Where the ball hits the paddle sets its angle. Darker bricks need two hits.',
+      'Bounce the ball off your paddle to break bricks. Where the ball hits the paddle sets its angle. Striped bricks need two hits.',
     controls: [
       { keys: ['←', '→'], action: 'Move paddle' },
       { keys: ['Mouse', 'Drag'], action: 'Move paddle' },

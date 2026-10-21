@@ -292,7 +292,7 @@ export default function mount(ctx) {
     g.arc(ball.x, ball.y, BALL_R, 0, Math.PI * 2);
     g.fill();
 
-    g.fillStyle = s.faint;
+    g.fillStyle = s.muted;
     g.font = font(11, 600);
     g.fillText('YOU', W / 2 - 70, 106);
     g.fillText('COMPUTER', W / 2 + 70, 106);

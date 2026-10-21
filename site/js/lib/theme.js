@@ -44,17 +44,22 @@ export function forgetTheme() {
   }
 }
 
-/** Applies a theme immediately and remembers it. */
-export function setTheme(theme) {
-  const next = THEMES.includes(theme) ? theme : DEFAULT_THEME;
+/** Applies a theme without saving it. */
+function applyTheme(theme) {
   const el = root();
   // Suppress hover transitions for one frame so everything switches together.
   el.classList.add('theme-switching');
-  el.dataset.theme = next;
-  document.querySelector('meta[name="theme-color"]')?.setAttribute('content', META_COLORS[next]);
-  saveTheme(next);
+  el.dataset.theme = theme;
+  document.querySelector('meta[name="theme-color"]')?.setAttribute('content', META_COLORS[theme]);
   requestAnimationFrame(() => requestAnimationFrame(() => el.classList.remove('theme-switching')));
-  window.dispatchEvent(new CustomEvent(EVENT, { detail: { theme: next } }));
+  window.dispatchEvent(new CustomEvent(EVENT, { detail: { theme } }));
+}
+
+/** Applies a theme immediately and remembers it. */
+export function setTheme(theme) {
+  const next = THEMES.includes(theme) ? theme : DEFAULT_THEME;
+  applyTheme(next);
+  saveTheme(next);
   return next;
 }
 
@@ -68,6 +73,15 @@ export function initTheme() {
   root().dataset.theme = theme;
   document.querySelector('meta[name="theme-color"]')?.setAttribute('content', META_COLORS[theme]);
   return theme;
+}
+
+if (typeof window !== 'undefined') {
+  // Keep every open tab on the same theme.
+  window.addEventListener('storage', (event) => {
+    if (event.key === THEME_KEY && THEMES.includes(event.newValue) && event.newValue !== getTheme()) {
+      applyTheme(event.newValue);
+    }
+  });
 }
 
 /** Calls `listener(theme)` whenever the theme changes. Returns an unsubscribe function. */

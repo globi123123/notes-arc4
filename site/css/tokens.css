@@ -37,7 +37,7 @@
   /* Text */
   --color-text: #ece9e2;
   --color-text-secondary: #aba79e;
-  --color-text-tertiary: #85817a;
+  --color-text-tertiary: #9a968d;
   --color-text-inverse: #1d1c1a;
   --color-text-hover: #d8d4cb;
   --color-inverse-soft: rgba(29, 28, 26, 0.14);
@@ -48,7 +48,7 @@
   --color-accent-hover: #e3896a;
   --color-accent-ink: #e8946f;
   --color-accent-strong: #b85a3b;
-  --color-accent-strong-hover: #c96442;
+  --color-accent-strong-hover: #a9502f;
   --color-accent-soft: #3b2820;
   --color-accent-softer: #2f231d;
   --color-accent-border: rgba(217, 119, 87, 0.42);
@@ -87,6 +87,8 @@
   --game-cell-open: #24231f;
   --game-cell-shine: rgba(255, 255, 255, 0.06);
   --game-peer: #36332f;
+  --game-grid-line: #4a4741;
+  --game-conflict-bg: rgba(229, 128, 109, 0.1);
   --game-card-face: #f1ede4;
   --game-card-face-border: rgba(0, 0, 0, 0.35);
   --game-card-matched: #dfe5d6;
@@ -189,7 +191,7 @@
 
   --color-text: #22211f;
   --color-text-secondary: #67645d;
-  --color-text-tertiary: #8b877e;
+  --color-text-tertiary: #77736b;
   --color-text-inverse: #fbfaf7;
   --color-text-hover: #3a3835;
   --color-inverse-soft: rgba(251, 250, 247, 0.16);
@@ -235,6 +237,8 @@
   --game-cell-open: #ffffff;
   --game-cell-shine: rgba(255, 255, 255, 0.55);
   --game-peer: #f6f1e8;
+  --game-grid-line: #e3dfd4;
+  --game-conflict-bg: rgba(180, 72, 58, 0.1);
   --game-card-face: #ffffff;
   --game-card-face-border: #e3dfd4;
   --game-card-matched: #e5e9dd;
@@ -247,11 +251,11 @@
   --game-n5: #8f5a33;
   --game-n6: #3f7f7a;
   --game-n7: #22211f;
-  --game-n8: #8b877e;
+  --game-n8: #77736b;
 
   --thumb-ink: #22211f;
 
-  --focus-ring: 0 0 0 2px var(--color-bg), 0 0 0 4px rgba(198, 97, 63, 0.7);
+  --focus-ring: 0 0 0 2px var(--color-bg), 0 0 0 4px #c6613f;
 
   --shadow-xs: 0 1px 1px rgba(34, 33, 31, 0.04);
   --shadow-sm: 0 1px 2px rgba(34, 33, 31, 0.05), 0 1px 1px rgba(34, 33, 31, 0.03);

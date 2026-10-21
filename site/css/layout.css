@@ -74,6 +74,7 @@
 }
 
 .site-nav__link svg {
+  flex: none;
   width: 15px;
   height: 15px;
 }
@@ -168,12 +169,16 @@
   border-radius: 50%;
 }
 
-@media (max-width: 760px) {
+/*
+ * Narrow header: brand, nav and game count on the first row; search and the
+ * theme switch share the second row so the first row never gets crowded.
+ */
+@media (max-width: 900px) {
   .site-header__inner {
     grid-template-columns: auto 1fr auto auto;
     grid-template-areas:
-      'brand nav count theme'
-      'search search search search';
+      'brand nav count count'
+      'search search search theme';
     gap: var(--space-2) var(--space-3);
     padding-block: var(--space-2) var(--space-3);
   }
@@ -189,10 +194,14 @@
 
   .count-pill {
     grid-area: count;
+    justify-self: end;
   }
 
   .theme-toggle {
     grid-area: theme;
+    justify-self: end;
+    width: 40px;
+    height: 40px;
   }
 
   .site-nav {
@@ -208,19 +217,30 @@
   }
 }
 
-@media (max-width: 400px) {
+@media (max-width: 520px) {
   .count-pill {
     display: none;
   }
 
   .site-header__inner {
     grid-template-areas:
-      'brand nav nav theme'
-      'search search search search';
+      'brand nav nav nav'
+      'search search search theme';
   }
 
   .site-nav__link {
     padding: 0 var(--space-2);
+  }
+}
+
+@media (max-width: 400px) {
+  /* Very small phones: Library and Favorites keep their labels, lose the icons. */
+  .site-nav__link[data-nav] svg {
+    display: none;
+  }
+
+  .brand {
+    font-size: 1.0625rem;
   }
 }
 

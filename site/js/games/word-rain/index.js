@@ -352,7 +352,7 @@ export default function mount(ctx) {
       g.fillStyle = s.ink;
       g.fillText(word.text, word.x + 14, word.y + 21);
       if (isTarget) {
-        g.fillStyle = palette.accent;
+        g.fillStyle = s.accentInk;
         g.fillText(word.text.slice(0, value.length), word.x + 14, word.y + 21);
       }
     }
@@ -368,7 +368,7 @@ export default function mount(ctx) {
         g.fillText(e.text, e.x, e.y);
       } else if (e.kind === 'hit') {
         g.font = font(15, 650);
-        g.fillStyle = palette.sageDeep;
+        g.fillStyle = s.hit;
         g.fillText(e.text, e.x, e.y + 18 - k * 30);
       } else {
         g.font = font(15, 650);

@@ -50,7 +50,7 @@
 }
 
 .rt-panel[data-state='go'] {
-  background: var(--color-accent);
+  background: var(--color-accent-strong);
   color: var(--color-on-accent);
 }
 
@@ -97,12 +97,12 @@
 }
 
 .rt-panel[data-state='go'] .rt-history li {
-  border-color: rgba(255, 255, 255, 0.4);
-  color: rgba(255, 255, 255, 0.85);
+  border-color: rgba(255, 255, 255, 0.45);
+  color: var(--color-on-accent);
 }
 
 .rt-panel[data-state='go'] .rt-history li.is-done {
-  background: rgba(255, 255, 255, 0.18);
+  background: rgba(0, 0, 0, 0.18);
 }
 
 @media (max-width: 480px) {

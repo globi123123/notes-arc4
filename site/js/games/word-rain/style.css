@@ -40,6 +40,10 @@
   border-radius: var(--radius-md);
 }
 
+.wr-input::placeholder {
+  color: var(--color-text-secondary);
+}
+
 .wr-input.is-wrong {
   border-color: var(--color-danger);
   box-shadow: 0 0 0 3px rgba(180, 72, 58, 0.12);

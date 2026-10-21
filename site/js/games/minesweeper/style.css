@@ -54,6 +54,7 @@
   position: relative;
   z-index: 1;
   border-radius: 5px;
+  box-shadow: var(--focus-ring);
 }
 
 .ms-cell svg {

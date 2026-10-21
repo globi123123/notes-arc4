@@ -391,7 +391,7 @@ export default function mount(ctx) {
 
     for (const brick of bricks) {
       if (brick.hp >= 2) {
-        fillRoundRect(g, brick.x, brick.y, brick.w, brick.h, 4, s.inkSoft);
+        fillRoundRect(g, brick.x, brick.y, brick.w, brick.h, 4, s.brickTough);
         fillRoundRect(g, brick.x + 3, brick.y + brick.h - 5, brick.w - 6, 2.5, 1.25, brick.color);
       } else {
         fillRoundRect(g, brick.x, brick.y, brick.w, brick.h, 4, brick.color);

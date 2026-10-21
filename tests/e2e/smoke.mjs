@@ -590,6 +590,55 @@ try {
     await fresh.close();
   });
 
+  await check('theme: open tabs follow a switch made in another tab', async () => {
+    const fresh = await browser.newContext({ viewport: { width: 1280, height: 900 } });
+    const first = await openPage(fresh);
+    const second = await openPage(fresh);
+    await first.goto(BASE);
+    await second.goto(`${BASE}#/play/snake`);
+    await first.waitForSelector('.game-card');
+    await second.waitForSelector('.game-canvas');
+    await first.click('.theme-toggle');
+    await waitFor(async () => (await second.getAttribute('html', 'data-theme')) === 'light', {
+      message: 'second tab to switch',
+    });
+    await fresh.close();
+  });
+
+  await check('theme: header fits with the toggle at phone and tablet widths', async () => {
+    for (const [width, mobile] of [
+      [320, true],
+      [360, true],
+      [390, true],
+      [414, true],
+      [430, true],
+      [768, true],
+      [820, false],
+      [1024, false],
+      [1280, false],
+    ]) {
+      const ctx = await browser.newContext({ viewport: { width, height: 800 }, isMobile: mobile, hasTouch: mobile });
+      const tpage = await openPage(ctx);
+      await tpage.goto(BASE);
+      await tpage.waitForSelector('.game-card');
+      const box = await tpage.evaluate(() => {
+        const t = document.querySelector('.theme-toggle').getBoundingClientRect();
+        const brand = document.querySelector('.brand').getBoundingClientRect();
+        const nav = document.querySelector('.site-nav__link').getBoundingClientRect();
+        return {
+          overflow: document.documentElement.scrollWidth - window.innerWidth,
+          toggleRight: t.right,
+          viewport: window.innerWidth,
+          overlap: brand.right > nav.left + 0.5,
+        };
+      });
+      assert(box.overflow <= 0, `${width}px: page overflows by ${box.overflow}px`);
+      assert(box.toggleRight <= box.viewport, `${width}px: toggle is cut off`);
+      assert(!box.overlap, `${width}px: brand and navigation overlap`);
+      await ctx.close();
+    }
+  });
+
   await check('theme: works when storage is blocked', async () => {
     const fresh = await browser.newContext({ viewport: { width: 1280, height: 900 } });
     await fresh.addInitScript(() => {
