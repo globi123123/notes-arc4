@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <!--
+      The website lives in site/. GitHub Pages normally publishes that folder
+      through the "Deploy to GitHub Pages" workflow. If Pages is set to deploy
+      straight from the branch instead, this page forwards visitors to it.
+    -->
+    <meta http-equiv="refresh" content="0; url=./site/" />
+    <link rel="canonical" href="./site/" />
+    <title>playground.</title>
+    <script>
+      location.replace('./site/' + location.hash);
+    </script>
+  </head>
+  <body>
+    <p><a href="./site/">Open playground.</a></p>
+  </body>
+</html>
