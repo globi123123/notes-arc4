@@ -122,9 +122,21 @@ export function generateSolved(rng = Math.random) {
 /**
  * Creates a puzzle with exactly one solution. Clues are removed in
  * symmetric pairs; a removal is undone if it would allow a second solution.
+ * Some grids cannot be thinned all the way to the target, so a few
+ * attempts are made and the sparsest result is kept.
  */
-export function generatePuzzle(difficulty = 'easy', rng = Math.random) {
+export function generatePuzzle(difficulty = 'easy', rng = Math.random, attempts = 8) {
   const target = DIFFICULTIES[difficulty]?.clues ?? 40;
+  let best = null;
+  for (let i = 0; i < attempts; i += 1) {
+    const candidate = carvePuzzle(target, rng);
+    if (!best || candidate.clues < best.clues) best = candidate;
+    if (best.clues <= target) break;
+  }
+  return best;
+}
+
+function carvePuzzle(target, rng) {
   const solution = generateSolved(rng);
   const puzzle = solution.slice();
   const order = Array.from({ length: 41 }, (_, i) => i);
