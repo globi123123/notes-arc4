@@ -1,0 +1,169 @@
+/* 2048 board. Tiles are positioned with CSS variables so moves can animate. */
+
+.t48 {
+  --t48-gap: clamp(8px, 2.2vw, 12px);
+  --t48-size: min(100%, 460px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  padding: var(--space-3) 0;
+}
+
+.t48-board {
+  position: relative;
+  width: var(--t48-size);
+  aspect-ratio: 1;
+  padding: var(--t48-gap);
+  border-radius: var(--radius-lg);
+  background: #ddd5c4;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.t48-grid,
+.t48-tiles {
+  position: absolute;
+  inset: var(--t48-gap);
+}
+
+.t48-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--t48-gap);
+}
+
+.t48-grid span {
+  border-radius: var(--radius-sm);
+  background: #e9e2d3;
+}
+
+.t48-tile {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: grid;
+  place-items: center;
+  width: calc((100% - 3 * var(--t48-gap)) / 4);
+  height: calc((100% - 3 * var(--t48-gap)) / 4);
+  border-radius: var(--radius-sm);
+  font-size: clamp(1.25rem, 6vw, 2.25rem);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.03em;
+  transform: translate(calc(var(--c) * (100% + var(--t48-gap))), calc(var(--r) * (100% + var(--t48-gap))));
+  transition: transform 110ms var(--ease-out);
+  will-change: transform;
+}
+
+.t48-tile > span {
+  display: block;
+}
+
+.t48-tile.is-new > span {
+  animation: t48-appear 160ms var(--ease-out) backwards;
+}
+
+.t48-tile.is-merged > span {
+  animation: t48-pop 170ms var(--ease-out);
+}
+
+.t48-tile.is-merged {
+  z-index: 2;
+}
+
+@keyframes t48-appear {
+  from {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+}
+
+@keyframes t48-pop {
+  50% {
+    transform: scale(1.12);
+  }
+}
+
+/* The inner span carries the color so the outer element can slide. */
+.t48-tile > span {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--tile-bg);
+  color: var(--tile-fg, var(--color-text));
+}
+
+.t48-tile[data-digits='3'] {
+  font-size: clamp(1.1rem, 5vw, 1.875rem);
+}
+
+.t48-tile[data-digits='4'] {
+  font-size: clamp(0.95rem, 4.2vw, 1.5rem);
+}
+
+.t48-tile[data-digits='5'] {
+  font-size: clamp(0.8rem, 3.4vw, 1.2rem);
+}
+
+.t48-tile[data-v='2'] {
+  --tile-bg: #f3eee3;
+}
+.t48-tile[data-v='4'] {
+  --tile-bg: #ebe2cf;
+}
+.t48-tile[data-v='8'] {
+  --tile-bg: #edcaa7;
+}
+.t48-tile[data-v='16'] {
+  --tile-bg: #e6ae85;
+  --tile-fg: #fff;
+}
+.t48-tile[data-v='32'] {
+  --tile-bg: #dc8f66;
+  --tile-fg: #fff;
+}
+.t48-tile[data-v='64'] {
+  --tile-bg: #c6613f;
+  --tile-fg: #fff;
+}
+.t48-tile[data-v='128'] {
+  --tile-bg: #dcb769;
+  --tile-fg: #fff;
+}
+.t48-tile[data-v='256'] {
+  --tile-bg: #d2a44e;
+  --tile-fg: #fff;
+}
+.t48-tile[data-v='512'] {
+  --tile-bg: #bf9139;
+  --tile-fg: #fff;
+}
+.t48-tile[data-v='1024'] {
+  --tile-bg: #7c8b6f;
+  --tile-fg: #fff;
+}
+.t48-tile[data-v='2048'] {
+  --tile-bg: #22211f;
+  --tile-fg: #fbfaf7;
+}
+.t48-tile.is-super {
+  --tile-bg: #3a3835;
+  --tile-fg: #f4e4da;
+}
+
+.t48-hint {
+  margin-top: var(--space-4);
+  color: var(--color-text-secondary);
+  font-size: var(--text-xs);
+  text-align: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .t48-tile {
+    transition: none;
+  }
+}

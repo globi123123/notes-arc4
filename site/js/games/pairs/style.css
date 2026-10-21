@@ -1,0 +1,99 @@
+/* Pairs: flipping cards with a restrained 3D turn. */
+
+.pairs {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  padding: var(--space-2) 0;
+}
+
+.pairs-grid {
+  --pairs-cols: 4;
+  --pairs-rows: 4;
+  --pairs-max: 440px;
+  display: grid;
+  grid-template-columns: repeat(var(--pairs-cols), minmax(0, 1fr));
+  gap: clamp(8px, 1.6vw, 14px);
+  /* Fit the whole board on screen: limited by width and by viewport height. */
+  width: min(100%, max(260px, min(var(--pairs-max), calc((100vh - 400px) * var(--pairs-cols) / var(--pairs-rows)))));
+}
+
+.pairs-grid[data-size='4x3'] {
+  --pairs-max: 480px;
+}
+
+.pairs-grid[data-size='6x6'] {
+  --pairs-max: 540px;
+  gap: clamp(6px, 1.2vw, 10px);
+}
+
+.pairs-card {
+  aspect-ratio: 1;
+  perspective: 800px;
+  border-radius: var(--radius-md);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.pairs-card:focus-visible {
+  border-radius: var(--radius-md);
+}
+
+.pairs-card__inner {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 320ms var(--ease-out);
+}
+
+.pairs-card.is-up .pairs-card__inner {
+  transform: rotateY(180deg);
+}
+
+.pairs-card__back,
+.pairs-card__face {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius-md);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.pairs-card__back {
+  border: 1px solid #b4532f;
+  background:
+    radial-gradient(circle at 50% 50%, transparent 0 18%, rgba(255, 255, 255, 0.28) 18% 21%, transparent 21%),
+    repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.08) 0 6px, transparent 6px 12px), var(--color-accent);
+  box-shadow: var(--shadow-sm);
+  transition: background-color var(--duration-fast) var(--ease-out);
+}
+
+.pairs-card:hover:not(.is-up) .pairs-card__back {
+  background-color: var(--color-accent-hover);
+}
+
+.pairs-card__face {
+  border: 1px solid var(--color-border);
+  background: var(--color-surface-raised);
+  box-shadow: var(--shadow-sm);
+  transform: rotateY(180deg);
+}
+
+.pairs-card__face svg {
+  width: 62%;
+  height: auto;
+}
+
+.pairs-card.is-matched .pairs-card__face {
+  border-color: rgba(124, 139, 111, 0.5);
+  background: var(--color-sage-soft);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pairs-card__inner {
+    transition: none;
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "name": "playground",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A small library of original browser games. Static site, no backend, deployable to GitHub Pages.",
+  "type": "module",
+  "scripts": {
+    "start": "node scripts/serve.mjs",
+    "start:pages": "node scripts/serve.mjs --base /notes-arc4/",
+    "lint": "eslint .",
+    "test": "node --test \"tests/unit/*.test.mjs\"",
+    "check": "node scripts/check-site.mjs",
+    "test:e2e": "node tests/e2e/smoke.mjs",
+    "verify": "npm run lint && npm test && npm run check",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.13.0",
+    "globals": "^17.13.0",
+    "playwright": "1.56.1",
+    "prettier": "^3.8.1"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}
